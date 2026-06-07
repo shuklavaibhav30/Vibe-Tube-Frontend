@@ -25,7 +25,7 @@ const Header = () => {
         <header className="sticky top-0 z-50 flex items-center justify-between px-4 py-2 border-b transition-colors bg-bg text-text-primary border-border-theme">
             <div className='flex items-center gap-4'>
                 <Link to="/" className='text-xl font-bold flex items-center gap-2'>
-                    <span className='bg-red-600 p-1 rounded text-white'>VT</span>VideoTube
+                    <span className='bg-red-600 p-1 rounded text-white'>VT</span>VibeTube
                 </Link>
             </div>
             <div className='flex-1 max-w-2xl px-4'>

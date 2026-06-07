@@ -48,7 +48,7 @@ const Login = () => {
           </div>
         </div>
         <h2 className={`text-3xl font-bold mb-2 text-center transition-colors ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Welcome Back</h2>
-        <p className={`text-center mb-8 transition-colors ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Sign in to your VideoTube account</p>
+        <p className={`text-center mb-8 transition-colors ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Sign in to your VibeTube account</p>
         
         {error && (
           <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded-lg mb-6 text-sm text-center">
@@ -106,7 +106,7 @@ const Login = () => {
         </form>
         
         <p className={`mt-8 text-center text-sm transition-colors ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-          New to VideoTube? {' '}
+          New to VibeTube? {' '}
           <Link to="/register" className='text-blue-500 font-semibold hover:text-blue-400 transition-colors'>Create an account</Link>
         </p>
       </div>

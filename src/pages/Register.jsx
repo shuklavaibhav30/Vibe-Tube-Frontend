@@ -58,15 +58,15 @@ const Register = () => {
     }
   
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#0F0F0F] py-12 px-4">
-      <div className='w-full max-w-lg p-8 bg-[#1F1F1F] rounded-2xl shadow-2xl border border-gray-800'>
+    <div className={`flex items-center justify-center min-h-screen transition-colors py-12 px-4 ${isDarkMode ? 'bg-[#0F0F0F]' : 'bg-gray-100'}`}>
+      <div className={`w-full max-w-lg p-8 rounded-2xl shadow-2xl border relative transition-colors ${isDarkMode ? 'bg-[#1F1F1F] border-gray-800' : 'bg-white border-gray-200'}`}>
         <div className="flex justify-center mb-6">
           <div className="bg-red-600 p-2 rounded-lg">
             <span className="text-2xl font-bold text-white">VT</span>
           </div>
         </div>
-        <h2 className='text-3xl font-bold text-white mb-2 text-center'>Create Account</h2>
-        <p className='text-gray-400 text-center mb-8'>Join our community and start sharing</p>
+        <h2 className={`text-3xl font-bold mb-2 text-center transition-colors ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Create Account</h2>
+        <p className={`text-center mb-8 transition-colors ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Join our community and start sharing</p>
 
         {error && (
           <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded-lg mb-6 text-sm text-center">
@@ -77,23 +77,23 @@ const Register = () => {
         <form onSubmit={handleSubmit} className='space-y-5'>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-300 ml-1">Full Name</label>
+              <label className={`text-sm font-medium ml-1 transition-colors ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Full Name</label>
               <input 
                 type='text'
                 name='fullName' 
                 placeholder='Raj Sharma' 
-                className='w-full p-3 bg-[#0F0F0F] text-white rounded-xl border border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all' 
+                className={`w-full p-3 rounded-xl border outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all ${isDarkMode ? 'bg-[#0F0F0F] text-white border-gray-700' : 'bg-gray-50 text-black border-gray-300'}`} 
                 onChange={handleChange} 
                 required
               />
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-300 ml-1">Username</label>
+              <label className={`text-sm font-medium ml-1 transition-colors ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Username</label>
               <input 
                 type='text'
                 name='username' 
                 placeholder='Rajsharma@123' 
-                className='w-full p-3 bg-[#0F0F0F] text-white rounded-xl border border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all' 
+                className={`w-full p-3 rounded-xl border outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all ${isDarkMode ? 'bg-[#0F0F0F] text-white border-gray-700' : 'bg-gray-50 text-black border-gray-300'}`} 
                 onChange={handleChange} 
                 required
               />
@@ -101,24 +101,24 @@ const Register = () => {
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-300 ml-1">Email Address</label>
+            <label className={`text-sm font-medium ml-1 transition-colors ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Email Address</label>
             <input 
               type='email'
               name='email' 
               placeholder='rajsharma@example.com' 
-              className='w-full p-3 bg-[#0F0F0F] text-white rounded-xl border border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all' 
+              className={`w-full p-3 rounded-xl border outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all ${isDarkMode ? 'bg-[#0F0F0F] text-white border-gray-700' : 'bg-gray-50 text-black border-gray-300'}`} 
               onChange={handleChange} 
               required
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-300 ml-1">Password</label>
+            <label className={`text-sm font-medium ml-1 transition-colors ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Password</label>
             <input 
               type='password'
               name='password' 
               placeholder='••••••••' 
-              className='w-full p-3 bg-[#0F0F0F] text-white rounded-xl border border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all' 
+              className={`w-full p-3 rounded-xl border outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all ${isDarkMode ? 'bg-[#0F0F0F] text-white border-gray-700' : 'bg-gray-50 text-black border-gray-300'}`} 
               onChange={handleChange} 
               required
             />
@@ -126,7 +126,7 @@ const Register = () => {
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-6 pt-2'>
             <div className='space-y-2'>
-              <label className="text-sm font-medium text-gray-300 ml-1 block">Avatar <span className="text-red-500">*</span></label>
+              <label className={`text-sm font-medium ml-1 block transition-colors ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Avatar <span className="text-red-500">*</span></label>
               <div className="relative group">
                 <input 
                   type="file" 
@@ -139,9 +139,9 @@ const Register = () => {
                 />
                 <label 
                   htmlFor="avatar-upload"
-                  className="flex items-center justify-center w-full p-3 bg-[#0F0F0F] border-2 border-dashed border-gray-700 rounded-xl cursor-pointer hover:border-blue-500 transition-colors"
+                  className={`flex items-center justify-center w-full p-3 border-2 border-dashed rounded-xl cursor-pointer hover:border-blue-500 transition-colors ${isDarkMode ? 'bg-[#0F0F0F] border-gray-700' : 'bg-gray-50 border-gray-300'}`}
                 >
-                  <span className="text-xs text-gray-400 truncate">
+                  <span className={`text-xs truncate ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                     {avatar ? avatar.name : "Select Avatar"}
                   </span>
                 </label>
@@ -149,7 +149,7 @@ const Register = () => {
             </div>
 
             <div className='space-y-2'>
-              <label className='text-sm font-medium text-gray-300 ml-1 block'>Cover Image</label>
+              <label className={`text-sm font-medium ml-1 block transition-colors ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Cover Image</label>
               <div className="relative group">
                 <input 
                   type="file" 
@@ -161,9 +161,9 @@ const Register = () => {
                 />
                 <label 
                   htmlFor="cover-upload"
-                  className="flex items-center justify-center w-full p-3 bg-[#0F0F0F] border-2 border-dashed border-gray-700 rounded-xl cursor-pointer hover:border-blue-500 transition-colors"
+                  className={`flex items-center justify-center w-full p-3 border-2 border-dashed rounded-xl cursor-pointer hover:border-blue-500 transition-colors ${isDarkMode ? 'bg-[#0F0F0F] border-gray-700' : 'bg-gray-50 border-gray-300'}`}
                 >
-                  <span className="text-xs text-gray-400 truncate">
+                  <span className={`text-xs truncate ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                     {coverImage ? coverImage.name : "Select Cover"}
                   </span>
                 </label>
@@ -188,7 +188,7 @@ const Register = () => {
           </button>
         </form>
         
-        <p className='text-gray-400 mt-8 text-center text-sm'>
+        <p className={`mt-8 text-center text-sm transition-colors ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
           Already having an account? {' '}
           <Link to="/login" className='text-blue-500 font-semibold hover:text-blue-400 transition-colors'>Sign In</Link>
         </p>
