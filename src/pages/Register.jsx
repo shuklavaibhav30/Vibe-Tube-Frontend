@@ -1,8 +1,10 @@
 import React,{useState} from 'react'
 import { useNavigate,Link } from 'react-router-dom'
 import API from '../api/axios'
+import { useTheme } from '../context/ThemeContext'
 
 const Register = () => {
+    const { isDarkMode } = useTheme();
     const [formData,setFormData]=useState({
       fullName:'',
       username:'',
