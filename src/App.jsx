@@ -15,6 +15,7 @@ import Tweet from "./pages/Tweet"
 import PlaylistDetail from "./pages/PlaylistDetail"
 import Subscriptions from "./pages/Subscriptions"
 import History from "./pages/History"
+import AuthSuccess from "./pages/AuthSuccess"
 
 
 //Protected Routes- If user not logged in, then show "Login to continue" screen
@@ -73,6 +74,7 @@ function App(){
       <Route path="/video/:videoId" element={<VideoDetail />} />
       <Route path="/c/:username" element={<Profile />} />
       <Route path="/search" element={<Search />} />
+      <Route path="/auth-success" element={<AuthSuccess />} />
 
       {/*Protected routes */}
       <Route path="/upload" element={

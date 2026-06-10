@@ -18,6 +18,10 @@ const VideoDetail = () => {
   const [showPlaylistModal, setShowPlaylistModal] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [subscribersCount, setSubscribersCount] = useState(0);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editForm, setEditForm] = useState({ title: '', description: '' });
+  const [thumbnail, setThumbnail] = useState(null);
+  const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
     const fetchVideo = async () => {
@@ -25,6 +29,7 @@ const VideoDetail = () => {
         const { data } = await API.get(`/videos/${videoId}`);
         const videoData = data.data;
         setVideo(videoData);
+        setEditForm({ title: videoData.title, description: videoData.description });
         
         // Fetch channel profile to get accurate subscription status and count
         // because the video API might not provide updated subscription info
@@ -66,8 +71,33 @@ const VideoDetail = () => {
     }
   };
 
-  if (loading) return <Layout><div className={`flex justify-center items-center h-full ${isDarkMode ? 'text-white' : 'text-black'}`}>Loading video...</div></Layout>;
-  if (!video) return <Layout><div className={`text-center py-20 ${isDarkMode ? 'text-white' : 'text-black'}`}>Video not found.</div></Layout>;
+  const handleUpdateVideo = async (e) => {
+    e.preventDefault();
+    setUpdating(true);
+    try {
+      const formData = new FormData();
+      formData.append("title", editForm.title);
+      formData.append("description", editForm.description);
+      if (thumbnail) {
+        formData.append("thumbnail", thumbnail);
+      }
+
+      const { data } = await API.patch(`/videos/${videoId}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+      
+      setVideo(data.data);
+      setIsEditing(false);
+      alert("Video updated successfully!");
+    } catch (error) {
+      alert("Error updating video: " + (error.response?.data?.message || error.message));
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  if (loading) return <Layout><div className="flex justify-center items-center h-full text-text-primary">Loading video...</div></Layout>;
+  if (!video) return <Layout><div className="text-center py-20 text-text-primary">Video not found.</div></Layout>;
 
   return (
     <Layout>
@@ -83,7 +113,73 @@ const VideoDetail = () => {
             />
           </div>
           
-          <h1 className="text-2xl font-bold mt-5 px-1">{video.title}</h1>
+          {isEditing ? (
+            <form onSubmit={handleUpdateVideo} className="mt-5 space-y-4 bg-surface p-6 rounded-2xl border border-border-theme">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-text-secondary uppercase tracking-wider">Title</label>
+                <input 
+                  type="text"
+                  value={editForm.title}
+                  onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                  className="w-full bg-input-bg border border-border-theme rounded-xl p-3 text-text-primary outline-none focus:border-accent"
+                  placeholder="Video Title"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-text-secondary uppercase tracking-wider">Description</label>
+                <textarea 
+                  value={editForm.description}
+                  onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                  className="w-full bg-input-bg border border-border-theme rounded-xl p-3 text-text-primary outline-none focus:border-accent h-32"
+                  placeholder="Video Description"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-text-secondary uppercase tracking-wider">Thumbnail (Optional)</label>
+                <input 
+                  type="file"
+                  onChange={(e) => setThumbnail(e.target.files[0])}
+                  className="w-full text-text-secondary file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent file:text-white hover:file:opacity-90"
+                  accept="image/*"
+                />
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button 
+                  type="submit" 
+                  disabled={updating}
+                  className="flex-1 py-3 bg-accent text-white rounded-xl font-bold hover:opacity-90 disabled:opacity-50"
+                >
+                  {updating ? "Updating..." : "Save Changes"}
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => setIsEditing(false)} 
+                  className="flex-1 py-3 bg-surface-hover text-text-primary rounded-xl font-bold border border-border-theme"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          ) : (
+            <>
+              <div className="flex items-start justify-between mt-5 px-1">
+                <h1 className="text-2xl font-bold text-text-primary">{video.title}</h1>
+                {isOwner && (
+                  <button 
+                    onClick={() => setIsEditing(true)}
+                    className="flex items-center gap-2 px-4 py-2 bg-surface text-text-primary rounded-full font-bold hover:bg-surface-hover transition-all border border-border-theme"
+                  >
+                    <svg className="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                    Edit
+                  </button>
+                )}
+              </div>
+            </>
+          )}
           
           <div className="flex flex-wrap items-center justify-between gap-4 mt-4 pb-6 border-b border-border-theme px-1">
             <div className="flex items-center gap-4">
@@ -163,9 +259,9 @@ const VideoDetail = () => {
 
         {/* Sidebar recommendations (Mock) */}
         <div className="w-full lg:w-[400px] shrink-0">
-          <h2 className={`font-bold mb-4 px-1 ${isDarkMode ? 'text-white' : 'text-black'}`}>Up Next</h2>
+          <h2 className="font-bold mb-4 px-1 text-text-primary">Up Next</h2>
           <div className="space-y-4">
-            <p className={`italic text-center py-10 border border-dashed rounded-2xl ${isDarkMode ? 'text-gray-500 border-gray-800' : 'text-gray-400 border-gray-300'}`}>
+            <p className="italic text-center py-10 border border-dashed rounded-2xl text-text-secondary border-border-theme">
               No recommendations available yet.
             </p>
           </div>

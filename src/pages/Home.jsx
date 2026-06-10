@@ -30,7 +30,7 @@ const Home = () => {
 
   if (loading) return(
     <Layout>
-      <div className={isDarkMode ? 'text-white' : 'text-black'}>Loading ...</div>
+      <div className="text-text-primary">Loading ...</div>
     </Layout>
   )
 

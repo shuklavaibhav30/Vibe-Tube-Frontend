@@ -24,17 +24,17 @@ const History = () => {
 
     if (loading) return (
         <Layout>
-            <div className='text-white p-10 text-center'>Loading watch history...</div>
+            <div className='text-text-primary p-10 text-center'>Loading watch history...</div>
         </Layout>
     );
 
     return (
         <Layout>
             <div className="p-4 md:p-8">
-                <h1 className="text-3xl font-bold text-white mb-8">Watch History</h1>
+                <h1 className="text-3xl font-bold text-text-primary mb-8">Watch History</h1>
                 
                 {history.length === 0 ? (
-                    <div className="text-gray-400 text-center py-20 bg-[#1F1F1F] rounded-2xl border border-dashed border-gray-800">
+                    <div className="text-text-secondary text-center py-20 bg-surface rounded-2xl border border-dashed border-border-theme">
                         <p className="text-xl">Your watch history is empty.</p>
                     </div>
                 ) : (
