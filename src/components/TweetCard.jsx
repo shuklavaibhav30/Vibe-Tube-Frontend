@@ -3,19 +3,13 @@ import { formatDistanceToNow, formatDistanceToNowStrict } from 'date-fns';
 import { useAuth } from '../context/AuthContext';
 import API from '../api/axios';
 import { useTheme } from '../context/ThemeContext';
+import LikeButton from './LikeButton';
 
 const TweetCard = ({ tweet, onUpdate, onDelete }) => {
     const { user } = useAuth();
     const { isDarkMode } = useTheme();
     const [isEditing, setIsEditing] = useState(false);
     const [content, setContent] = useState(tweet.content);
-    const [isLiked, setIsLiked] = useState(tweet.isLiked || false);
-    const [likesCount, setLikesCount] = useState(tweet.likesCount || 0);
-
-    useEffect(() => {
-        setIsLiked(tweet.isLiked || false);
-        setLikesCount(tweet.likesCount || 0);
-    }, [tweet.isLiked, tweet.likesCount]);
 
     const isOwner = user?._id === tweet.owner?._id;
 
@@ -24,15 +18,6 @@ const TweetCard = ({ tweet, onUpdate, onDelete }) => {
         setIsEditing(false);
     };
 
-    const handleToggleLike = async () => {
-        try {
-            const { data } = await API.patch(`/likes/t/${tweet._id}`);
-            setIsLiked(data.data.isLiked);
-            setLikesCount(prev => data.data.isLiked ? prev + 1 : prev - 1);
-        } catch (error) {
-            console.error("Error toggling tweet like:", error);
-        }
-    };
     return (
         <div className="p-5 rounded-2xl border border-border-theme bg-card-bg hover:border-accent/30 transition-all shadow-sm">
             <div className="flex gap-4">
@@ -73,21 +58,13 @@ const TweetCard = ({ tweet, onUpdate, onDelete }) => {
                     )}
 
                     <div className="mt-4 flex items-center gap-4">
-                        <button 
-                            onClick={handleToggleLike}
-                            className={`flex items-center gap-2 px-3 py-1 rounded-full transition-colors ${
-                                isLiked ? "text-red-500 bg-red-500/10" : "text-text-secondary hover:bg-surface-hover"
-                            }`}
-                        >
-                            <svg 
-                                className={`w-5 h-5 ${isLiked ? "fill-red-500" : "fill-none"}`} 
-                                stroke="currentColor" 
-                                viewBox="0 0 24 24"
-                            >
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                            <span className="text-sm font-bold">{likesCount}</span>
-                        </button>
+                        <LikeButton 
+                            type="tweet"
+                            id={tweet._id}
+                            initialIsLiked={tweet.isLiked}
+                            initialLikesCount={tweet.likesCount}
+                            variant="compact"
+                        />
                     </div>
                 </div>
             </div>

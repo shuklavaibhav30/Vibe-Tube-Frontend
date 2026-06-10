@@ -3,20 +3,29 @@ import API from '../api/axios';
 import { formatDistanceToNow } from 'date-fns';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import LikeButton from './LikeButton';
 
 const CommentSection = ({videoId}) => {
     const { user } = useAuth();
     const { isDarkMode } = useTheme();
     const [comments,setComments]=useState([]);
     const [content,setContent]=useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     //Load Comments
     const fetchComments=async()=>{
+        setLoading(true);
+        setError(null);
         try{
             const {data}=await API.get(`/comments/${videoId}`);
-            setComments(data.data.docs);//backend using pagination
+            setComments(data.data?.docs || []);
         }catch(e){
-            console.error(e);
+            console.error("Error fetching comments:", e);
+            // If error (like unauthorized), just keep comments empty
+            setComments([]);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -91,30 +100,48 @@ const CommentSection = ({videoId}) => {
             </div>
         )}
 
+        {/* Loading */}
+        {loading && (
+            <div className="p-6 text-center text-text-secondary">
+                Loading comments...
+            </div>
+        )}
+
         {/* List */}
-        <div className="space-y-8">
-            {comments.map(comment=>(
-                <div key={comment._id} className='flex gap-4 group'>
-                    <img src={comment.owner?.avatar} className="w-10 h-10 rounded-full object-cover transition-colors bg-surface" />
-                    <div className="flex-1">
-                        <div className="flex gap-2 text-sm items-center">
-                            <span className="font-bold text-text-primary">{comment.owner?.fullName}</span>
-                            <span className="text-text-secondary">{formatDistanceToNow(new Date(comment.createdAt))} ago</span>
+        {!loading && comments.length > 0 && (
+            <div className="space-y-8">
+                {comments.map(comment=>(
+                    <div key={comment._id} className='flex gap-4 group'>
+                        <img src={comment.owner?.avatar} className="w-10 h-10 rounded-full object-cover transition-colors bg-surface" />
+                        <div className="flex-1">
+                            <div className="flex gap-2 text-sm items-center">
+                                <span className="font-bold text-text-primary">{comment.owner?.fullName}</span>
+                                <span className="text-text-secondary">{formatDistanceToNow(new Date(comment.createdAt))} ago</span>
+                            </div>
+                            <p className="mt-1 text-text-primary">{comment.content}</p>
+                            
+                            <div className="flex items-center gap-4 mt-2">
+                                <LikeButton 
+                                    type="comment"
+                                    id={comment._id}
+                                    initialIsLiked={comment.isLiked}
+                                    initialLikesCount={comment.likesCount}
+                                    variant="compact"
+                                />
+                                {user?._id === comment.owner?._id && (
+                                    <button 
+                                        onClick={()=>handleDeleteComment(comment._id)}
+                                        className="text-xs text-text-secondary hover:text-red-500 transition-all"
+                                    >
+                                        Delete
+                                    </button>
+                                )}
+                            </div>
                         </div>
-                        <p className="mt-1 text-text-primary">{comment.content}</p>
-                        
-                        {user?._id === comment.owner?._id && (
-                            <button 
-                                onClick={()=>handleDeleteComment(comment._id)}
-                                className="mt-2 text-xs text-text-secondary hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
-                            >
-                                Delete
-                            </button>
-                        )}
                     </div>
-                </div>
-            ))}
-        </div>
+                ))}
+            </div>
+        )}
     </div>
   )
 }

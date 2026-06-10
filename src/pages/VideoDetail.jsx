@@ -55,7 +55,7 @@ const VideoDetail = () => {
       }
     };
     fetchVideo();
-  }, [videoId, user?._id]);
+  }, [videoId]);
 
   const isOwner = user?._id === video?.owner?._id;
 
@@ -212,7 +212,8 @@ const VideoDetail = () => {
             
             <div className="flex items-center gap-3">
               <LikeButton 
-                videoId={video._id} 
+                type="video"
+                id={video._id} 
                 initialIsLiked={video.isLiked} 
                 initialLikesCount={video.likesCount} 
               />
